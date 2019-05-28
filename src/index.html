@@ -78,6 +78,7 @@
         list: []
       }
     });
+    const mode = new Mode();
     let filess;
     const dialog = require('electron').remote;
     const dom = document.querySelector('#upload-btn');
@@ -99,9 +100,7 @@
     });
 
     function listChange(files) {
-      filess = files;
       const windowURL = window.URL || window.webkitURL;
-      const x = new Excel(files);
       const text = document.querySelector('.ant-upload-list-item-name');
       const list = document.querySelector('.ant-upload-list');
       if (files.length === 0) {
@@ -114,8 +113,8 @@
     }
 
     function sum() {
-      const excel = new Excel();
-      excel.read(app.list);
+      const excel = new Excel(app.list, mode);
+      excel.read();
     }
 
   </script>
