@@ -9,10 +9,10 @@ class Excel {
   read() {
     this.files.forEach((element) => {
       const workExcels = table.readFile(element.path);
-      const insertHeader = ['match', 'accuracy'];
-      const insertData = [];
       workExcels.SheetNames.forEach((sheetName) => {
         let excelIndex = 6;
+        const insertHeader = ['match', 'accuracy'];
+        const insertData = [];
         // eslint-disable-next-line no-restricted-syntax
         for (const grid in workExcels.Sheets[sheetName]) {
           if (workExcels.Sheets[sheetName][`X${excelIndex}`]) {
@@ -25,11 +25,10 @@ class Excel {
             excelIndex += 1;
           }
         }
-      });
-      console.log(insertData);
-      table.utils.sheet_add_json(workExcels, insertData, {
-        header: insertHeader,
-        // origin: 'X5',
+        table.utils.sheet_add_json(workExcels.Sheets[sheetName], insertData, {
+          header: insertHeader,
+          origin: 'X4',
+        });
       });
       table.writeFile(workExcels, 'out.xlsx');
     });
