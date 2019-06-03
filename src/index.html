@@ -23,7 +23,7 @@
   <div class="main">
     <div class="ant-upload ant-upload-drag ng-star-inserted">
       <div class="ant-upload ant-upload-btn" id="upload-btn">
-        <input style="display: none;" type="file" multiple="">
+        <input style="display: none;" type="file" multiple=""  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
         <div class="ant-upload-drag-container">
           <p class="ant-upload-drag-icon ng-star-inserted">
             <i nz-icon="" type="inbox" class="anticon anticon-inbox">
@@ -39,7 +39,7 @@
       </div>
     </div>
     <div class="ant-upload-list ant-upload-list-text" id="app">
-      <div class="ant-upload-list-item" v-for="item in list">
+      <div class="ant-upload-list-item" v-for="(item,index) in list">
         <div class="ant-upload-list-item-info">
           <span nz-tooltip="" class="ng-tns-c14-48 ng-star-inserted" style="">
             <i class="anticon ng-tns-c14-48 anticon-paper-clip ng-star-inserted"><svg viewBox="64 64 896 896"
@@ -54,7 +54,7 @@
               :title="item.path">{{item.path}}</span>
           </span>
         </div>
-        <i type="close" class="anticon ng-tns-c14-48 anticon-close ng-star-inserted" title="删除文件">
+        <i type="close" class="anticon ng-tns-c14-48 anticon-close ng-star-inserted" title="删除文件" v-on:click="del(index)">
           <svg viewBox="64 64 896 896" fill="currentColor" width="1em" height="1em" class="ng-tns-c14-48"
             data-icon="close" aria-hidden="true">
             <path
@@ -72,10 +72,16 @@
   <script src="./assets/js/xlsx.js"></script>
   <script src="./assets/js/train.js"></script>
   <script>
-    var app = new Vue({
+    const FILE_TYPE = ['.csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
+    const app = new Vue({
       el: "#app",
       data: {
         list: []
+      },
+      methods:{
+        del: function(index){
+          this.list.splice(index,1);
+        }
       }
     });
     const mode = new Mode();
@@ -100,16 +106,21 @@
     });
 
     function listChange(files) {
-      const windowURL = window.URL || window.webkitURL;
+      const volidFiles = [];
+      [...files].forEach((element,index) => {
+        if(FILE_TYPE.includes(element.type)){
+          volidFiles.push(element);
+        }
+      });
       const text = document.querySelector('.ant-upload-list-item-name');
       const list = document.querySelector('.ant-upload-list');
-      if (files.length === 0) {
+      if (volidFiles.length === 0) {
         list.style.visibility = 'hidden';
         app.list = [];
         return;
       }
       list.style.visibility = 'initial';
-      app.list = [...files];
+      app.list = [...volidFiles];
     }
 
     function sum() {

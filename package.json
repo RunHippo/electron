@@ -29,10 +29,11 @@
         ]
       },
       "electronPackagerConfig": {
-        "packageManager": "npm"
+        "packageManager": "npm",
+        "asar": true
       },
       "electronWinstallerConfig": {
-        "name": "electron"
+        "name": "popcorn"
       },
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
@@ -42,13 +43,14 @@
       },
       "windowsStoreConfig": {
         "packageName": "",
-        "name": "electron"
+        "name": "popcorn"
       }
     }
   },
   "dependencies": {
     "electron-compile": "^6.4.4",
     "electron-squirrel-startup": "^1.0.0",
+    "exceljs": "^1.11.0",
     "fs": "0.0.1-security",
     "node-nlp": "^3.1.1",
     "node-xlsx": "^0.15.0",
