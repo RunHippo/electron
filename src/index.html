@@ -16,14 +16,51 @@
       max-width: 760px;
     }
 
+    .over::before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: #000;
+      opacity: 0.8;
+      height: 100%;
+      width: 100%;
+    }
+
+    .over {
+      position: fixed;
+      display: none;
+      color: red;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 100;
+      text-align: center;
+    }
+
+    .over p {
+      position: relative;
+      font-size: 20px;
+      font-weight: 600;
+      margin-top: 140px;
+    }
+
   </style>
 </head>
 
 <body>
+  <div class="over">
+    <p>计算中...</p>
+  </div>
   <div class="main">
+    <p style="text-align: center;">注意: 转换过程文档请勿被第三方程序占用，表格格式支持xlsx</p>
+    <p style="text-align: center;">注意: 需将匹配列列名修改为"疾病名称"和"ICD-10编码"</p>
     <div class="ant-upload ant-upload-drag ng-star-inserted">
       <div class="ant-upload ant-upload-btn" id="upload-btn">
-        <input style="display: none;" type="file" multiple=""  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+        <input style="display: none;" type="file" multiple=""
+          accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
         <div class="ant-upload-drag-container">
           <p class="ant-upload-drag-icon ng-star-inserted">
             <i nz-icon="" type="inbox" class="anticon anticon-inbox">
@@ -39,7 +76,7 @@
       </div>
     </div>
     <div class="ant-upload-list ant-upload-list-text" id="app">
-      <div class="ant-upload-list-item" v-for="(item,index) in list">
+      <div class="ant-upload-list-item" v-for="(item, index) in list">
         <div class="ant-upload-list-item-info">
           <span nz-tooltip="" class="ng-tns-c14-48 ng-star-inserted" style="">
             <i class="anticon ng-tns-c14-48 anticon-paper-clip ng-star-inserted"><svg viewBox="64 64 896 896"
@@ -54,7 +91,8 @@
               :title="item.path">{{item.path}}</span>
           </span>
         </div>
-        <i type="close" class="anticon ng-tns-c14-48 anticon-close ng-star-inserted" title="删除文件" v-on:click="del(index)">
+        <i type="close" class="anticon ng-tns-c14-48 anticon-close ng-star-inserted" title="删除文件"
+          v-on:click="del(index)">
           <svg viewBox="64 64 896 896" fill="currentColor" width="1em" height="1em" class="ng-tns-c14-48"
             data-icon="close" aria-hidden="true">
             <path
@@ -72,15 +110,18 @@
   <script src="./assets/js/xlsx.js"></script>
   <script src="./assets/js/train.js"></script>
   <script>
-    const FILE_TYPE = ['.csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
+    const FILE_TYPE = ['.csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/vnd.ms-excel'
+    ];
+    const over = document.querySelector('.over');
     const app = new Vue({
       el: "#app",
       data: {
         list: []
       },
-      methods:{
-        del: function(index){
-          this.list.splice(index,1);
+      methods: {
+        del: function (index) {
+          this.list.splice(index, 1);
         }
       }
     });
@@ -107,8 +148,8 @@
 
     function listChange(files) {
       const volidFiles = [];
-      [...files].forEach((element,index) => {
-        if(FILE_TYPE.includes(element.type)){
+      [...files].forEach((element, index) => {
+        if (FILE_TYPE.includes(element.type)) {
           volidFiles.push(element);
         }
       });
@@ -123,9 +164,16 @@
       app.list = [...volidFiles];
     }
 
+    function listDel(index) {
+
+    }
+
     function sum() {
+      over.style.display = 'block';
       const excel = new Excel(app.list, mode);
       excel.read();
+      over.style.display = 'none';
+      alert('计算结束，请在源文件的BT,BU,BV,BW列查看！');
     }
 
   </script>
